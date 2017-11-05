@@ -13,24 +13,35 @@ export default class App extends Component {
   constructor() {
     super()
     this.state = {
-      user: {
-        photoURL:
-          'https://media.licdn.com/mpr/mpr/shrinknp_400_400/AAEAAQAAAAAAAAc-AAAAJDk2ZWQ0MzgzLTIwYTYtNGM0ZC04MzJhLWY0ZjUzNTk4NzZiMw.jpg',
-        email: 'luisma_1989@hotmail.com',
-        displayName: 'Luis Manuel',
-        location: 'Madrid, EspaÃƒÂ±a'
-      }
+      user: null
     }
 
     this.handleOnAuth = this.handleOnAuth.bind(this)
+    this.handleLogout = this.handleLogout.bind(this)
+  }
+
+  componentWillMount() {
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        this.setState({ user })
+      } else {
+        this.setState({ user: null })
+      }
+    })
   }
 
   handleOnAuth () {
     const provider = new firebase.auth.GithubAuthProvider()
 
     firebase.auth().signInWithPopup(provider)
-      .then(result => console.log(result))
-      .catch(error => console.log(error))
+      .then(result => console.log(`${result.user.email} ha iniciado sesion con Github`))
+      .catch(error => console.error(`Error: ${error.code} : ${error.message}`))
+  }
+
+  handleLogout () {
+    firebase.auth().signOut()
+      .then(() => console.log('Te has desconectado correctamente'))
+      .catch(() => console.error('Un error ocurrio'))
   }
 
   render() {
@@ -51,8 +62,6 @@ export default class App extends Component {
                 return (
                   <Login
                     onAuth={this.handleOnAuth}
-                    onAuth2={this.handleOnAuthFacebook}
-                    onAuth3={this.handleOnAuthGithub}
                   />
                 )
               }

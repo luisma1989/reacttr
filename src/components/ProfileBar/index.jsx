@@ -6,10 +6,11 @@ import {Link} from 'react-router-dom'
 const propTypes = {
   picture: PropTypes.string.isRequired,
   userName: PropTypes.string.isRequired,
-  onOpenText: PropTypes.func.isRequired
+  onOpenText: PropTypes.func.isRequired,
+  onLogout: PropTypes.func.isRequired
 }
 
-function ProfileBar ({picture, userName, onOpenText}) {
+function ProfileBar ({picture, userName, onOpenText, onLogout}) {
   return (
     <div className={styles.root}>
       <Link to='/profile'>
@@ -20,6 +21,9 @@ function ProfileBar ({picture, userName, onOpenText}) {
       <span className={styles.userName}>Hola @{userName}</span>
       <button onClick={onOpenText} className={styles.button}>
         <span className="fa fa-lg fa-edit"></span>! Tweet
+      </button>
+      <button onClick={onLogout} className={styles.button}>
+        <span className="fa fa-lg fa-sign-out"></span>Salir
       </button>
     </div>
   )

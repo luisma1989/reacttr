@@ -6,8 +6,7 @@ const propTypes = {
   picture: PropTypes.string.isRequired,
   displayName: PropTypes.string.isRequired,
   userName: PropTypes.string.isRequired,
-  emailAddress: PropTypes.string.isRequired,
-  location: PropTypes.string.isRequired
+  emailAddress: PropTypes.string.isRequired
 }
 
 function Profile ({picture, displayName, userName, emailAddress, location}) {
