@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
-// import { Link } from 'react-router'
+import PropTypes from 'prop-types'
+import { Link } from 'react-router-dom'
 import styles from './messages.css'
 import moment from 'moment'
 
@@ -32,14 +33,16 @@ class Message extends Component {
 
   render () {
     let dateFormat = moment(this.props.date).fromNow()
-    // let userLink = `/user/${this.props.userName}`
+    let userLink = `/user/${this.props.userName}`
 
     return (
       <div className={styles.root}>
         <div className={styles.user}>
-          <figure>
-            <img src={ this.props.picture } className={ styles.avatar } />
-          </figure>
+          <Link to={userLink}>
+            <figure>
+              <img src={ this.props.picture } className={ styles.avatar } />
+            </figure>
+          </Link>
           <span className={ styles.displayName }>{ this.props.displayName }</span>
           <span className={ styles.userName }>{ this.props.userName }</span>
           <span className={ styles.date }>{ dateFormat }</span>
@@ -68,6 +71,19 @@ class Message extends Component {
       </div>
     )
   }
+}
+
+Message.propTypes = {
+  numRetweets: PropTypes.number.isRequired,
+  numFavorites: PropTypes.number.isRequired,
+  date: PropTypes.number.isRequired,
+  onRetweet: PropTypes.func.isRequired,
+  onFavorite: PropTypes.func.isRequired,
+  onReplyTweet: PropTypes.func.isRequired,
+  userName: PropTypes.string.isRequired,
+  picture: PropTypes.string.isRequired,
+  displayName: PropTypes.string.isRequired,
+  text: PropTypes.string.isRequired
 }
 
 export default Message

@@ -1,6 +1,14 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import Message from '../Message'
 import styles from './message-list.css'
+
+const propTypes = {
+  messages: PropTypes.arrayOf(PropTypes.object).isRequired,
+  onRetweet: PropTypes.func.isRequired,
+  onFavorite: PropTypes.func.isRequired,
+  onReplyTweet: PropTypes.func.isRequired
+}
 
 class MessageList extends Component {
   constructor () {
@@ -33,5 +41,7 @@ class MessageList extends Component {
     )
   }
 }
+
+MessageList.propTypes = propTypes
 
 export default MessageList
