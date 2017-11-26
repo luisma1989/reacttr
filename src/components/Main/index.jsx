@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import firebase from 'firebase'
 import PropTypes from 'prop-types'
 import uuid from 'uuid'
 import MessageList from '../MessageList'
@@ -18,28 +19,7 @@ class Main extends Component {
       user: Object.assign({}, this.props.user,  { retweets: []}, { favorites: [] }),
       openText: false,
       usernameToReply: '',
-      messages: [
-        {
-          id: uuid.v4(),
-          text: 'Mensaje de prueba',
-          picture: 'https://media.licdn.com/mpr/mpr/shrinknp_400_400/AAEAAQAAAAAAAAc-AAAAJDk2ZWQ0MzgzLTIwYTYtNGM0ZC04MzJhLWY0ZjUzNTk4NzZiMw.jpg',
-          displayName: 'Luisma',
-          userName: 'Luis Manuel Fernandez Camacho',
-          date: Date.now() - 180000,
-          retweets: 0,
-          favorites: 0
-        },
-        {
-          id: uuid.v4(),
-          text: 'Otro mensaje de prueba',
-          picture: 'https://media.licdn.com/mpr/mpr/shrinknp_400_400/AAEAAQAAAAAAAAc-AAAAJDk2ZWQ0MzgzLTIwYTYtNGM0ZC04MzJhLWY0ZjUzNTk4NzZiMw.jpg',
-          displayName: 'Luisma',
-          userName: 'Luis Manuel Fernandez Camacho',
-          date: Date.now() - 1800000,
-          retweets: 0,
-          favorites: 0
-        }
-      ]
+      messages: []
     }
     this.handleSendText = this.handleSendText.bind(this)
     this.handleCloseText = this.handleCloseText.bind(this)
@@ -47,6 +27,17 @@ class Main extends Component {
     this.handleRetweet = this.handleRetweet.bind(this)
     this.handleFavorite = this.handleFavorite.bind(this)
     this.handleReplyTweet = this.handleReplyTweet.bind(this)
+  }
+
+  componentWillMount () {
+    const messageRef = firebase.database().ref().child('messages')
+
+    messageRef.on('child_added', snapshot => {
+      this.setState({
+        messages: this.state.messages.concat(snapshot.val()),
+        openText: false
+      })
+    })
   }
 
   handleSendText (event) {
@@ -58,13 +49,14 @@ class Main extends Component {
       displayName: this.props.user.displayName,
       picture: this.props.user.photoURL,
       date: Date.now(),
-      text: event.target.text.value
+      text: event.target.text.value,
+      favorites: 0,
+      retweets:0
     }
 
-    this.setState({
-      messages: this.state.messages.concat(newMessage),
-      openText: false
-    })
+    const messageRef = firebase.database().ref().child('messages')
+    const messageId = messageRef.push()
+    messageId.set(newMessage)
   }
 
   handleCloseText () {

@@ -6,7 +6,8 @@
   "scripts": {
     "start": "npm run build && npm run serve",
     "build": "webpack --colors --display-error-details",
-    "serve": "webpack-dev-server --content-base build/ --colors --progress"
+    "serve": "webpack-dev-server --content-base build/ --colors --progress",
+    "production": "webpack -p"
   },
   "author": "Luis Manuel Fernandez Camacho",
   "license": "ISC",
